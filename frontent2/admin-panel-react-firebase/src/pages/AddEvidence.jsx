@@ -12,22 +12,23 @@ export default function AddEvidence() {
   const [desc, setDesc] = useState("");
 
   const handleSubmit = async () => {
-  try {
-    const res = await axios.post(
-      "https://chain-of-custody.onrender.com/evidence/add",
-      {
-        name,
-        description: desc,
-      }
-    );
+    try {
+      const res = await axios.post(
+        "https://chain-of-custody.onrender.com/evidence/add",
+        {
+          name,
+          description: desc,
+        }
+      );
 
-    alert("Saved: " + res.data.message);
-  } catch (error) {
-    console.error(error);
-    alert("API Error");
-  }
-};
-
+      alert("Saved: " + res.data.message);
+      setName("");
+      setDesc("");
+    } catch (error) {
+      console.error(error);
+      alert("API Error");
+    }
+  };
 
   return (
     <Card style={{ padding: 20, maxWidth: 600 }}>
