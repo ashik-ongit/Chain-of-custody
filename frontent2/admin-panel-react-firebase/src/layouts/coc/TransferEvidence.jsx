@@ -30,7 +30,7 @@ export default function TransferEvidence() {
     // load list of evidence from backend
     async function loadList() {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/evidence/list");
+        const res = await axios.get("${API_BASE_URL}/evidence/list");
         // Expecting array of { id, name, summary }
         setEvidenceList(res.data.items || []);
       } catch (err) {
@@ -54,7 +54,7 @@ export default function TransferEvidence() {
         to_role: toRole,
         notes,
       };
-      const res = await axios.post("http://127.0.0.1:8000/evidence/transfer", payload);
+      const res = await axios.post("${API_BASE_URL}/evidence/transfer", payload);
       alert("Transfer: " + (res.data.message || "OK"));
       // optionally refresh list/timeline
     } catch (err) {

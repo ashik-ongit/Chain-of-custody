@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import API_BASE_URL from "config/api";
 
 import Card from "@mui/material/Card";
 import MDBox from "components/MDBox";
@@ -13,13 +14,10 @@ export default function AddEvidence() {
 
   const handleSubmit = async () => {
     try {
-      const res = await axios.post(
-        "https://chain-of-custody.onrender.com/evidence/add",
-        {
-          name,
-          description: desc,
-        }
-      );
+      const res = await axios.post(`${API_BASE_URL}/evidence/add`, {
+        name,
+        description: desc,
+      });
 
       alert("Saved: " + res.data.message);
       setName("");

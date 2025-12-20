@@ -16,7 +16,7 @@ export default function AuditorDashboard() {
 
   React.useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/evidence/list")
+      .get("${API_BASE_URL}/evidence/list")
       .then((res) => setRows(res.data.items || []))
       .catch(console.error);
   }, []);
@@ -26,7 +26,7 @@ export default function AuditorDashboard() {
     setResult(null);
 
     axios
-      .get(`http://127.0.0.1:8000/evidence/verify/${id}`)
+      .get(`${API_BASE_URL}/evidence/verify/${id}`)
       .then((res) => setResult(res.data))
       .catch(() =>
         setResult({

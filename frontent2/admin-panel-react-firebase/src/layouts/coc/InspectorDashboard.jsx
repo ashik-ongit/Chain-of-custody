@@ -12,7 +12,7 @@ export default function InspectorDashboard() {
 
   React.useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/evidence/list")
+      .get("${API_BASE_URL}/evidence/list")
       .then((res) => {
         const items = res.data.items || res.data;
         setRows(
