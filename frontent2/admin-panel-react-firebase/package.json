@@ -2,10 +2,10 @@
   "name": "admin-panel",
   "version": "2.1.0",
   "private": true,
-  "author": "Hurarah",
+  "author": "Ashik ",
   "description": "Admin panel",
   "engines": {
-    "node": "14 || 15 || 16",
+    "node": ">=18",
     "npm": ">=6"
   },
   "dependencies": {
