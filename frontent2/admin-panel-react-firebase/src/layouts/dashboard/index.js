@@ -2,6 +2,7 @@
 import Grid from "@mui/material/Grid";
 import axios from "axios";
 import * as React from "react";
+import API_BASE_URL from "config/api";
 
 // Admin panel components
 import MDBox from "components/MDBox";
@@ -36,7 +37,7 @@ function Dashboard() {
 
   React.useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/dashboard/stats", {
+      .get("${API_BASE_URL}/dashboard/stats", {
         params: { role: "admin" },
       })
       .then((res) => setStats(res.data))
@@ -52,7 +53,7 @@ function Dashboard() {
 
   React.useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/dashboard/charts")
+      .get("${API_BASE_URL}/dashboard/charts")
       .then((res) => setCharts(res.data))
       .catch(console.error);
   }, []);
