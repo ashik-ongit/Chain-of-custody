@@ -3,7 +3,11 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "App";
 
-// 🔑 Chart.js REQUIRED REGISTRATION (THIS FIXES BLANK ADMIN PAGE)
+// Material Dashboard Context
+import { MaterialUIControllerProvider } from "context";
+import { AuthContextProvider } from "context/AuthContext";
+
+// ✅ Chart.js FIX (THIS IS THE KEY)
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,6 +19,7 @@ import {
   Legend,
 } from "chart.js";
 
+// 🔑 Register ALL required components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,10 +29,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-// Material Dashboard 2 React Context Provider
-import { MaterialUIControllerProvider } from "context";
-import { AuthContextProvider } from "context/AuthContext";
 
 ReactDOM.render(
   <BrowserRouter>

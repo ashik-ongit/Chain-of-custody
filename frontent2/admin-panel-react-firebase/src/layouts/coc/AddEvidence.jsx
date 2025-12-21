@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import API_BASE_URL from "config/api";
 
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -18,7 +19,7 @@ export default function AddEvidence() {
 
   const handleSubmit = async () => {
     try {
-      const res = await axios.post("http://127.0.0.1:8000/evidence/add", {
+      const res = await axios.post(`${API_BASE_URL}/evidence/add`, {
         name,
         description: desc,
       });

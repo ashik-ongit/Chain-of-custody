@@ -32,7 +32,7 @@ export default function EvidenceTimeline() {
   // Load evidence list
   useEffect(() => {
     axios
-      .get("${API_BASE_URL}/evidence/list")
+      .get(`${API_BASE_URL}/evidence/list`)
       .then((res) => setEvidenceList(res.data.items || []))
       .catch(console.error);
   }, []);

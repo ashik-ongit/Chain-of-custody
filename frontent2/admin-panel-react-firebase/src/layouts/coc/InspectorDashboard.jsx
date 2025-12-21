@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import API_BASE_URL from "config/api";
 
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -12,7 +13,7 @@ export default function InspectorDashboard() {
 
   React.useEffect(() => {
     axios
-      .get("${API_BASE_URL}/evidence/list")
+      .get(`${API_BASE_URL}/evidence/list`)
       .then((res) => {
         const items = res.data.items || res.data;
         setRows(

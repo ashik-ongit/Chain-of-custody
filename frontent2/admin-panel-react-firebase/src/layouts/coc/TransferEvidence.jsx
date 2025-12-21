@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import API_BASE_URL from "config/api";
 
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -30,7 +31,7 @@ export default function TransferEvidence() {
     // load list of evidence from backend
     async function loadList() {
       try {
-        const res = await axios.get("${API_BASE_URL}/evidence/list");
+        const res = await axios.get(`${API_BASE_URL}/evidence/list`);
         // Expecting array of { id, name, summary }
         setEvidenceList(res.data.items || []);
       } catch (err) {
@@ -54,7 +55,7 @@ export default function TransferEvidence() {
         to_role: toRole,
         notes,
       };
-      const res = await axios.post("${API_BASE_URL}/evidence/transfer", payload);
+      const res = await axios.post(`${API_BASE_URL}/evidence/transfer`, payload);
       alert("Transfer: " + (res.data.message || "OK"));
       // optionally refresh list/timeline
     } catch (err) {

@@ -18,7 +18,7 @@ export default function AuditorDashboard() {
 
   React.useEffect(() => {
     axios
-      .get("${API_BASE_URL}/evidence/list")
+      .get(`${API_BASE_URL}/evidence/list`)
       .then((res) => setRows(res.data.items || []))
       .catch(console.error);
   }, []);
