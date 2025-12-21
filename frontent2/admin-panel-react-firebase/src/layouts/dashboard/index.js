@@ -37,7 +37,7 @@ function Dashboard() {
 
   React.useEffect(() => {
     axios
-      .get("${API_BASE_URL}/dashboard/stats", {
+      .get(`${API_BASE_URL}/dashboard/stats`, {
         params: { role: "admin" },
       })
       .then((res) => setStats(res.data))
@@ -53,7 +53,7 @@ function Dashboard() {
 
   React.useEffect(() => {
     axios
-      .get("${API_BASE_URL}/dashboard/charts")
+      .get(`${API_BASE_URL}/dashboard/charts`)
       .then((res) => setCharts(res.data))
       .catch(console.error);
   }, []);
