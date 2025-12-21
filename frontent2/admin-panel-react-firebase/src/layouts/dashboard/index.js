@@ -123,7 +123,7 @@ function Dashboard() {
               />
             </Grid>
 
-            {/* Transfers Over Time */}
+            {/* Transfers Over Time — FIXED */}
             <Grid item xs={12} md={6} lg={4}>
               <ReportsLineChart
                 color="success"
@@ -132,15 +132,17 @@ function Dashboard() {
                 date="live"
                 chart={{
                   labels: charts.transfers_over_time.labels,
-                  datasets: {
-                    label: "Transfers",
-                    data: charts.transfers_over_time.data,
-                  },
+                  datasets: [
+                    {
+                      label: "Transfers",
+                      data: charts.transfers_over_time.data,
+                    },
+                  ],
                 }}
               />
             </Grid>
 
-            {/* Verification Results */}
+            {/* Verification Results — FIXED */}
             <Grid item xs={12} md={6} lg={4}>
               <ReportsLineChart
                 color="dark"
@@ -149,10 +151,12 @@ function Dashboard() {
                 date="live"
                 chart={{
                   labels: charts.verification_results.labels,
-                  datasets: {
-                    label: "Verifications",
-                    data: charts.verification_results.data,
-                  },
+                  datasets: [
+                    {
+                      label: "Verifications",
+                      data: charts.verification_results.data,
+                    },
+                  ],
                 }}
               />
             </Grid>
