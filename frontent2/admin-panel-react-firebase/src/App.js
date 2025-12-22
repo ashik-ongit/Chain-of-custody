@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from "react";
-import * as React from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 // react-router components
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
@@ -20,7 +19,7 @@ import Configurator from "examples/Configurator";
 import theme from "assets/theme";
 import themeDark from "assets/theme-dark";
 
-// Routes
+// Routes & Auth
 import { AuthContext } from "context/AuthContext";
 import routes, { authRoutes } from "routes";
 import Login from "layouts/authentication/users/Login";
@@ -48,10 +47,10 @@ function App() {
     whiteSidenav,
     darkMode,
   } = controller;
+
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
   const isLoginPage = pathname === "/login";
-
 
   // Open sidenav on hover
   const handleOnMouseEnter = () => {
@@ -98,18 +97,23 @@ function App() {
       return null;
     });
 
-  // Auth routes (role specific)
+  // Role-based auth routes
   const getAuthRoutes = (allAuthRoutes) =>
     allAuthRoutes.map((route) => {
       if (route.route && route.routeRole === role) {
         return (
-          <Route exact path={route.route} element={route.component} key={route.route} />
+          <Route
+            exact
+            path={route.route}
+            element={route.component}
+            key={route.route}
+          />
         );
       }
       return null;
     });
 
-  // Configurator button
+  // Configurator floating button
   const configsButton = (
     <MDBox
       display="flex"
@@ -138,51 +142,44 @@ function App() {
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
 
-      {/* Side Navigation - Only show when NOT on login and user has a role */}
-{role && !isLoginPage && (
-  <>
-    <Sidenav
-      color={sidenavColor}
-      brand={
-        (transparentSidenav && !darkMode) || whiteSidenav
-          ? brandDark
-          : brandWhite
-      }
-      brandName={
-        role === "admin"
-          ? "Admin Panel"
-          : role === "brand"
-          ? "Brand Panel"
-          : role === "bank"
-          ? "Bank Panel"
-          : role === "inspector"
-          ? "Inspector Panel"
-          : role === "custodian"
-          ? "Custodian Panel"
-          : role === "auditor"
-          ? "Auditor Panel"
-          : ""
-      }
-      routes={routes}
-      onMouseEnter={handleOnMouseEnter}
-      onMouseLeave={handleOnMouseLeave}
-    />
+      {/* Side Navigation */}
+      {role && !isLoginPage && (
+        <>
+          <Sidenav
+            color={sidenavColor}
+            brand={
+              (transparentSidenav && !darkMode) || whiteSidenav
+                ? brandDark
+                : brandWhite
+            }
+            brandName={
+              role === "admin"
+                ? "Admin Panel"
+                : role === "inspector"
+                ? "Inspector Panel"
+                : role === "custodian"
+                ? "Custodian Panel"
+                : role === "auditor"
+                ? "Auditor Panel"
+                : ""
+            }
+            routes={routes}
+            onMouseEnter={handleOnMouseEnter}
+            onMouseLeave={handleOnMouseLeave}
+          />
 
-    <Configurator />
-    {configsButton}
-  </>
-)}
+          <Configurator />
+          {configsButton}
+        </>
+      )}
 
       {layout === "vr" && <Configurator />}
 
       {/* ROUTES */}
       <Routes>
         <Route path="/login" element={<Login />} />
-
         {getRoutes(routes)}
         {getAuthRoutes(authRoutes)}
-
-        {/* FIXED — no more role-based redirect here */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </ThemeProvider>
