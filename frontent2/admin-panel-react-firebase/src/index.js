@@ -1,4 +1,7 @@
-import "./utils/chartjs";
+// 🔑 Chart.js AUTO registration (PRODUCTION SAFE)
+// MUST be the very first import
+import "chart.js/auto";
+
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
@@ -7,29 +10,6 @@ import App from "App";
 // Material Dashboard Context
 import { MaterialUIControllerProvider } from "context";
 import { AuthContextProvider } from "context/AuthContext";
-
-// ✅ Chart.js FIX (THIS IS THE KEY)
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-// 🔑 Register ALL required components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Tooltip,
-  Legend
-);
 
 ReactDOM.render(
   <BrowserRouter>

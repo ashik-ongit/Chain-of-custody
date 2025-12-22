@@ -1,12 +1,9 @@
 // @mui material components
 import Grid from "@mui/material/Grid";
-import axios from "axios";
 import * as React from "react";
-import API_BASE_URL from "config/api";
 
 // Admin panel components
 import MDBox from "components/MDBox";
-
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
@@ -19,7 +16,7 @@ import { db } from "../../firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 function Dashboard() {
-  // Firestore fetch (unchanged)
+  // Firestore fetch (unchanged, harmless)
   React.useEffect(() => {
     async function fetchData() {
       await getDocs(collection(db, "deviceTokens"));
@@ -27,36 +24,29 @@ function Dashboard() {
     fetchData();
   }, []);
 
-  // ===== STATS (SAFE DEFAULTS) =====
-  const [stats, setStats] = React.useState({
-    total_evidence: 0,
-    in_custody: 0,
-    transfers_today: 0,
+  // ===== DEMO STATS (NO BACKEND CALLS) =====
+  const [stats] = React.useState({
+    total_evidence: 12,
+    in_custody: 8,
+    transfers_today: 3,
     integrity_errors: 0,
   });
 
-  React.useEffect(() => {
-    axios
-      .get(`${API_BASE_URL}/dashboard/stats`, {
-        params: { role: "admin" },
-      })
-      .then((res) => setStats(res.data))
-      .catch(console.error);
-  }, []);
-
-  // ===== CHARTS (SAFE DEFAULTS) =====
-  const [charts, setCharts] = React.useState({
-    evidence_added: { labels: [], data: [] },
-    transfers_over_time: { labels: [], data: [] },
-    verification_results: { labels: [], data: [] },
+  // ===== DEMO CHART DATA (NO BACKEND CALLS) =====
+  const [charts] = React.useState({
+    evidence_added: {
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+      data: [2, 4, 6, 8, 10],
+    },
+    transfers_over_time: {
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+      data: [1, 3, 2, 5, 4],
+    },
+    verification_results: {
+      labels: ["Pass", "Fail"],
+      data: [12, 1],
+    },
   });
-
-  React.useEffect(() => {
-    axios
-      .get(`${API_BASE_URL}/dashboard/charts`)
-      .then((res) => setCharts(res.data))
-      .catch(console.error);
-  }, []);
 
   return (
     <DashboardLayout>
@@ -101,16 +91,15 @@ function Dashboard() {
           </Grid>
         </Grid>
 
-        {/* ===== CHARTS (BACKEND ONLY) ===== */}
+        {/* ===== CHARTS ===== */}
         <MDBox mt={4.5}>
           <Grid container spacing={3}>
-            {/* Evidence Added */}
             <Grid item xs={12} md={6} lg={4}>
               <ReportsBarChart
                 color="info"
                 title="Evidence Added"
-                description="Live evidence count"
-                date="live"
+                description="Demo data"
+                date="demo"
                 chart={{
                   labels: charts.evidence_added.labels,
                   datasets: [
@@ -123,13 +112,12 @@ function Dashboard() {
               />
             </Grid>
 
-            {/* Transfers Over Time — FIXED */}
             <Grid item xs={12} md={6} lg={4}>
               <ReportsLineChart
                 color="success"
                 title="Transfers Over Time"
-                description="Live custody transfers"
-                date="live"
+                description="Demo data"
+                date="demo"
                 chart={{
                   labels: charts.transfers_over_time.labels,
                   datasets: [
@@ -142,13 +130,12 @@ function Dashboard() {
               />
             </Grid>
 
-            {/* Verification Results — FIXED */}
             <Grid item xs={12} md={6} lg={4}>
               <ReportsLineChart
                 color="dark"
                 title="Verification Results"
-                description="Live integrity checks"
-                date="live"
+                description="Demo data"
+                date="demo"
                 chart={{
                   labels: charts.verification_results.labels,
                   datasets: [
