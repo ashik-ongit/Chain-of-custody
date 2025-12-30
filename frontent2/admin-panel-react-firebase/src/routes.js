@@ -20,36 +20,163 @@ import { Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "context/AuthContext";
 
+// Loading component
+const LoadingScreen = () => (
+  <div style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '100vh',
+    fontSize: '18px'
+  }}>
+    Loading...
+  </div>
+);
+
 // ROLE-BASED WRAPPERS
 const AdminAuthRoutes = ({ children }) => {
-  const { role } = useContext(AuthContext);
-  return role === "admin" ? children : <Navigate to="/login" />;
+  const { role, currentUser, loading } = useContext(AuthContext);
+  
+  // Wait for auth to initialize
+  if (loading) {
+    return <LoadingScreen />;
+  }
+  
+  // Wait for auth to initialize - if user is logged in but role is not set yet, show loading
+  if (currentUser && !role) {
+    return <LoadingScreen />;
+  }
+  
+  // If role is set and matches, show children
+  if (role === "admin") {
+    return children;
+  }
+  
+  // Otherwise redirect to login
+  return <Navigate to="/login" />;
 };
 
 const BrandAuthRoutes = ({ children }) => {
-  const { role } = useContext(AuthContext);
-  return role === "brand" ? children : <Navigate to="/login" />;
+  const { role, currentUser, loading } = useContext(AuthContext);
+  
+  if (loading || (currentUser && !role)) {
+    return <LoadingScreen />;
+  }
+  
+  if (role === "brand") {
+    return children;
+  }
+  
+  return <Navigate to="/login" />;
 };
 
 const BankAuthRoutes = ({ children }) => {
-  const { role } = useContext(AuthContext);
-  return role === "bank" ? children : <Navigate to="/login" />;
+  const { role, currentUser, loading } = useContext(AuthContext);
+  
+  if (loading || (currentUser && !role)) {
+    return <LoadingScreen />;
+  }
+  
+  if (role === "bank") {
+    return children;
+  }
+  
+  return <Navigate to="/login" />;
 };
 
 const InspectorAuthRoutes = ({ children }) => {
-  const { role } = useContext(AuthContext);
-  return role === "inspector" ? children : <Navigate to="/login" />;
+  const { role, currentUser, loading } = useContext(AuthContext);
+  
+  if (loading || (currentUser && !role)) {
+    return <LoadingScreen />;
+  }
+  
+  if (role === "inspector") {
+    return children;
+  }
+  
+  return <Navigate to="/login" />;
 };
 
 const CustodianAuthRoutes = ({ children }) => {
-  const { role } = useContext(AuthContext);
-  return role === "custodian" ? children : <Navigate to="/login" />;
+  const { role, currentUser, loading } = useContext(AuthContext);
+  
+  if (loading || (currentUser && !role)) {
+    return <LoadingScreen />;
+  }
+  
+  if (role === "custodian") {
+    return children;
+  }
+  
+  return <Navigate to="/login" />;
 };
 
 const AuditorAuthRoutes = ({ children }) => {
-  const { role } = useContext(AuthContext);
-  return role === "auditor" ? children : <Navigate to="/login" />;
+  const { role, currentUser, loading } = useContext(AuthContext);
+  
+  if (loading || (currentUser && !role)) {
+    return <LoadingScreen />;
+  }
+  
+  if (role === "auditor") {
+    return children;
+  }
+  
+  return <Navigate to="/login" />;
 };
+
+// Route wrapper components
+const AdminDashboardRoute = () => (
+  <AdminAuthRoutes><Dashboard /></AdminAuthRoutes>
+);
+
+const AdminAddEvidenceRoute = () => (
+  <AdminAuthRoutes><AddEvidence /></AdminAuthRoutes>
+);
+
+const AdminTransferRoute = () => (
+  <AdminAuthRoutes><TransferEvidence /></AdminAuthRoutes>
+);
+
+const AdminTimelineRoute = () => (
+  <AdminAuthRoutes><EvidenceTimeline /></AdminAuthRoutes>
+);
+
+// Inspector route wrappers
+const InspectorDashboardRoute = () => (
+  <InspectorAuthRoutes><InspectorDashboard /></InspectorAuthRoutes>
+);
+
+const InspectorAddEvidenceRoute = () => (
+  <InspectorAuthRoutes><AddEvidence /></InspectorAuthRoutes>
+);
+
+const InspectorTimelineRoute = () => (
+  <InspectorAuthRoutes><EvidenceTimeline /></InspectorAuthRoutes>
+);
+
+// Custodian route wrappers
+const CustodianDashboardRoute = () => (
+  <CustodianAuthRoutes><CustodianDashboard /></CustodianAuthRoutes>
+);
+
+const CustodianTransferRoute = () => (
+  <CustodianAuthRoutes><TransferEvidence /></CustodianAuthRoutes>
+);
+
+const CustodianTimelineRoute = () => (
+  <CustodianAuthRoutes><EvidenceTimeline /></CustodianAuthRoutes>
+);
+
+// Auditor route wrappers
+const AuditorDashboardRoute = () => (
+  <AuditorAuthRoutes><AuditorDashboard /></AuditorAuthRoutes>
+);
+
+const AuditorTimelineRoute = () => (
+  <AuditorAuthRoutes><EvidenceTimeline /></AuditorAuthRoutes>
+);
 
 // MAIN ROUTES
 const routes = [
@@ -63,7 +190,7 @@ const routes = [
     key: "admin/dashboard",
     icon: <DashboardIcon />,
     route: "/admin/dashboard",
-    component: <AdminAuthRoutes><Dashboard /></AdminAuthRoutes>,
+    component: <AdminDashboardRoute />,
   },
   {
     routeRole: "admin",
@@ -72,7 +199,7 @@ const routes = [
     key: "admin/add-evidence",
     icon: <InventoryIcon />,
     route: "/admin/add-evidence",
-    component: <AdminAuthRoutes><AddEvidence /></AdminAuthRoutes>,
+    component: <AdminAddEvidenceRoute />,
   },
   {
     routeRole: "admin",
@@ -81,7 +208,7 @@ const routes = [
     key: "admin/transfer",
     icon: <CategoryIcon />,
     route: "/admin/transfer",
-    component: <AdminAuthRoutes><TransferEvidence /></AdminAuthRoutes>,
+    component: <AdminTransferRoute />,
   },
   {
     routeRole: "admin",
@@ -90,7 +217,7 @@ const routes = [
     key: "admin/timeline",
     icon: <DashboardIcon />,
     route: "/admin/timeline",
-    component: <AdminAuthRoutes><EvidenceTimeline /></AdminAuthRoutes>,
+    component: <AdminTimelineRoute />,
   },
 
   // ------------------------------
@@ -103,11 +230,7 @@ const routes = [
     key: "inspector/dashboard",
     icon: <DashboardIcon />,
     route: "/inspector/dashboard",
-    component: (
-      <InspectorAuthRoutes>
-        <InspectorDashboard />
-      </InspectorAuthRoutes>
-    ),
+    component: <InspectorDashboardRoute />,
   },
   {
     routeRole: "inspector",
@@ -116,11 +239,7 @@ const routes = [
     key: "inspector/add-evidence",
     icon: <InventoryIcon />,
     route: "/inspector/add-evidence",
-    component: (
-      <InspectorAuthRoutes>
-        <AddEvidence />
-      </InspectorAuthRoutes>
-    ),
+    component: <InspectorAddEvidenceRoute />,
   },
   {
     routeRole: "inspector",
@@ -129,11 +248,7 @@ const routes = [
     key: "inspector/timeline",
     icon: <DashboardIcon />,
     route: "/inspector/timeline",
-    component: (
-      <InspectorAuthRoutes>
-        <EvidenceTimeline />
-      </InspectorAuthRoutes>
-    ),
+    component: <InspectorTimelineRoute />,
   },
 
   // ------------------------------
@@ -146,11 +261,7 @@ const routes = [
     key: "custodian/dashboard",
     icon: <DashboardIcon />,
     route: "/custodian/dashboard",
-    component: (
-      <CustodianAuthRoutes>
-        <CustodianDashboard />
-      </CustodianAuthRoutes>
-    ),
+    component: <CustodianDashboardRoute />,
   },
   {
     routeRole: "custodian",
@@ -159,11 +270,7 @@ const routes = [
     key: "custodian/transfer",
     icon: <CategoryIcon />,
     route: "/custodian/transfer",
-    component: (
-      <CustodianAuthRoutes>
-        <TransferEvidence />
-      </CustodianAuthRoutes>
-    ),
+    component: <CustodianTransferRoute />,
   },
   {
     routeRole: "custodian",
@@ -172,11 +279,7 @@ const routes = [
     key: "custodian/timeline",
     icon: <DashboardIcon />,
     route: "/custodian/timeline",
-    component: (
-      <CustodianAuthRoutes>
-        <EvidenceTimeline />
-      </CustodianAuthRoutes>
-    ),
+    component: <CustodianTimelineRoute />,
   },
 
   // ------------------------------
@@ -189,11 +292,7 @@ const routes = [
     key: "auditor/dashboard",
     icon: <DashboardIcon />,
     route: "/auditor/dashboard",
-    component: (
-      <AuditorAuthRoutes>
-        <AuditorDashboard />
-      </AuditorAuthRoutes>
-    ),
+    component: <AuditorDashboardRoute />,
   },
   {
     routeRole: "auditor",
@@ -202,11 +301,7 @@ const routes = [
     key: "auditor/timeline",
     icon: <DashboardIcon />,
     route: "/auditor/timeline",
-    component: (
-      <AuditorAuthRoutes>
-        <EvidenceTimeline />
-      </AuditorAuthRoutes>
-    ),
+    component: <AuditorTimelineRoute />,
   },
 ];
 
